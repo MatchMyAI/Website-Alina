@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+
+<!-- ======================================================================
+     HIER ANPASSEN — trag hier eure persönlichen Daten ein.
+     Das ist der EINZIGE Bereich, den du bearbeiten musst.
+     Alles andere weiter unten kannst du einfach so lassen.
+     ====================================================================== -->
+<script>
+  const CONFIG = {
+
+    // Eure Namen
+    namen: {
+      ich: "Philine",
+      du: "Alina"
+    },
+
+    // Seit wie vielen Jahren seid ihr schon Freundinnen?
+    // (Kein Live-Zähler mit Uhrzeit — einfach eine ruhige Zahl.)
+    freundschaftJahre: 12,
+
+    // Eure Geburtstage (nur Monat + Tag, das Jahr wird automatisch berechnet)
+    geburtstage: {
+      du: { monat: 9, tag: 30 },
+      ich: { monat: 9, tag: 5 }
+    },
+
+    // Das mag ich am liebsten an dir.
+    // Die Anzahl ist flexibel — die Seite passt sich automatisch an.
+    gruende: [
+      "Dein Humor",
+      "Das wir über alles reden können",
+      "Deine liebevolle Art",
+      "Das wir IMMER wenn wir zusammen sind Spaß haben",
+      "Dass wir zusammen so viel lachen"
+    ],
+
+    // Das wünsche ich dir für das nächste Jahr.
+    wuensche: [
+      "Ganz viel Spaß hihi",
+      "Viele tolle gemeinsame Momente",
+      "Ein Jahr voller Erlebnisse, die wir nie vergessen"
+    ],
+
+    // Die letzte Überschrift ganz am Ende der Seite
+    abschluss: {
+      ueberschrift: "Ich bin so dankbar, dich als beste Freundin zu haben",
+      bildUrl: ""  // optional: Link zu einem Bild, z.B. "https://i.imgur.com/xxxxx.jpg" — sonst leer lassen
+    }
+  };
+</script>
+<!-- ====================================================================== -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title id="page-title">Für dich</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'Arial', 'sans-serif']
+        },
+        colors: {
+          brand: {
+            bg: '#fdf3f7',
+            card: '#ffffff',
+            border: '#f6d3e3',
+            accent: '#ec4899',
+            accent2: '#f4a6c9',
+            text: '#4a2b3a',
+            muted: '#ab8290'
+          }
+        }
+      }
+    }
+  };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    -webkit-font-smoothing: antialiased;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .tabular-nums { font-variant-numeric: tabular-nums; }
+
+  /* Scroll-Reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Reason-Karten Animationen */
+  @keyframes reason-fade  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes reason-zoom  { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+  @keyframes reason-slide { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes reason-flip  { from { opacity: 0; transform: perspective(600px) rotateY(90deg); } to { opacity: 1; transform: perspective(600px) rotateY(0deg); } }
+
+  .anim-fade  { animation: reason-fade .6s ease-in-out both; }
+  .anim-zoom  { animation: reason-zoom .55s cubic-bezier(.34,1.56,.64,1) both; }
+  .anim-slide { animation: reason-slide .55s ease-out both; }
+  .anim-flip  { animation: reason-flip .6s ease-in-out both; transform-style: preserve-3d; }
+
+  @keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-6px); }
+    40%, 60% { transform: translateX(6px); }
+  }
+  .shake { animation: shake .5s; }
+
+  @keyframes bounce-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+  .bounce-soft { animation: bounce-soft 2s ease-in-out infinite; }
+
+  .floating-hearts {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .floating-hearts .heart {
+    position: absolute;
+    bottom: -5%;
+    color: #ec4899;
+    opacity: 0;
+    animation-name: float-heart;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+  }
+  .floating-hearts .heart.accent2 { color: #f4a6c9; }
+  @keyframes float-heart {
+    0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: .35; }
+    50%  { transform: translateY(-55vh) translateX(12px) rotate(8deg); opacity: .22; }
+    90%  { opacity: .1; }
+    100% { transform: translateY(-105vh) translateX(-12px) rotate(-8deg); opacity: 0; }
+  }
+
+  .heart-accent { color: #ec4899; margin: 0 0.15em; }
+
+  .polaroid-scroll {
+    display: flex;
+    gap: 22px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 20px 6vw 34px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .polaroid-scroll::-webkit-scrollbar { height: 6px; }
+  .polaroid-scroll::-webkit-scrollbar-track { background: transparent; }
+  .polaroid-scroll::-webkit-scrollbar-thumb { background: #f6d3e3; border-radius: 4px; }
+
+  .polaroid {
+    flex: 0 0 auto;
+    width: 200px;
+    background: #fffdfb;
+    padding: 10px 10px 28px;
+    border-radius: 3px;
+    box-shadow: 0 12px 26px rgba(236, 72, 153, .18);
+    transform: rotate(var(--rot, 0deg));
+    transition: transform .35s ease;
+    scroll-snap-align: center;
+  }
+  .polaroid:hover { transform: rotate(0deg) scale(1.05); }
+  .polaroid img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    border-radius: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .anim-fade, .anim-zoom, .anim-slide, .anim-flip, .bounce-soft, .shake {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .floating-hearts { display: none; }
+  }
+</style>
+</head>
+
+<body class="bg-brand-bg text-brand-text font-sans antialiased">
+
+<canvas id="confetti-canvas" class="fixed inset-0 w-screen h-screen pointer-events-none z-50"></canvas>
+
+<!-- Sanft schwebende Herzchen im Hintergrund, dezent über der ganzen Seite -->
+<div class="floating-hearts" aria-hidden="true">
+  <span class="heart" style="left:4%; font-size:14px; animation-duration:16s; animation-delay:0s;">♥</span>
+  <span class="heart accent2" style="left:14%; font-size:10px; animation-duration:12s; animation-delay:2s;">♥</span>
+  <span class="heart" style="left:24%; font-size:12px; animation-duration:19s; animation-delay:5s;">♥</span>
+  <span class="heart accent2" style="left:38%; font-size:16px; animation-duration:15s; animation-delay:1s;">♥</span>
+  <span class="heart" style="left:52%; font-size:11px; animation-duration:13s; animation-delay:6s;">♥</span>
+  <span class="heart accent2" style="left:64%; font-size:15px; animation-duration:17s; animation-delay:3s;">♥</span>
+  <span class="heart" style="left:76%; font-size:10px; animation-duration:14s; animation-delay:8s;">♥</span>
+  <span class="heart accent2" style="left:86%; font-size:13px; animation-duration:18s; animation-delay:4s;">♥</span>
+  <span class="heart" style="left:94%; font-size:12px; animation-duration:16s; animation-delay:7s;">♥</span>
+</div>
+
+<!-- ============ HERO ============ -->
+<section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-6 relative">
+  <p class="text-brand-accent text-2xl sm:text-3xl font-medium tracking-tight mb-4">Für meine beste Freundin</p>
+  <h1 id="hero-name" class="text-5xl sm:text-7xl font-semibold tracking-tight mb-6"></h1>
+  <p class="text-brand-muted text-base sm:text-lg max-w-md">Eine kleine Seite, nur für dich.</p>
+
+  <div class="absolute bottom-10 bounce-soft text-brand-muted">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </div>
+</section>
+
+<!-- ============ FREUNDSCHAFTSDAUER ============ -->
+<section id="friendship" class="reveal min-h-screen flex flex-col items-center justify-center px-6 py-24 text-center">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2 text-center">So lange sind wir schon befreundet <span class="heart-accent">♥</span></h2>
+  <p class="text-brand-muted text-sm mb-12 text-center">Und es werden noch viele mehr.</p>
+
+  <div class="bg-brand-card border border-brand-border rounded-3xl px-16 py-14 shadow-sm">
+    <span id="friendship-years" class="block text-6xl sm:text-8xl font-semibold text-brand-accent tabular-nums">0</span>
+    <span class="block text-brand-muted text-sm mt-3 tracking-wide">Jahre Freundschaft</span>
+  </div>
+</section>
+
+<!-- ============ GRÜNDE ============ -->
+<section id="reasons" class="reveal min-h-screen flex flex-col items-center px-6 pt-24 sm:pt-32 pb-24">
+  <h2 id="reasons-heading" class="text-2xl sm:text-3xl font-semibold mb-2 text-center"></h2>
+  <p id="reasons-progress" class="text-brand-muted text-sm mb-8 text-center"></p>
+
+  <button id="reasons-btn"
+    class="bg-brand-accent text-white font-medium px-8 py-4 rounded-full hover:scale-105 active:scale-95 transition-transform shadow-lg shadow-brand-accent/20">
+    Klick mich
+  </button>
+
+  <div id="reasons-current" class="hidden mt-8 w-full max-w-md">
+    <div id="reasons-current-card" class="bg-brand-card border border-brand-border rounded-xl px-6 py-6 text-center text-lg text-brand-text/90"></div>
+  </div>
+
+  <div id="reasons-closing" class="hidden text-center max-w-md mt-8">
+    <p id="reasons-closing-text" class="text-xl sm:text-2xl font-medium text-brand-accent"></p>
+  </div>
+
+  <div id="reasons-list" class="hidden mt-10 w-full max-w-md space-y-3"></div>
+</section>
+
+<!-- ============ COUNTDOWNS ============ -->
+<section id="countdowns" class="reveal min-h-screen flex flex-col items-center justify-center px-6 py-24">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-12 text-center">Die nächsten Geburtstage <span class="heart-accent">♥</span></h2>
+
+  <div class="grid sm:grid-cols-2 gap-6 w-full max-w-3xl">
+    <div class="bg-brand-card border border-brand-border rounded-2xl p-6">
+      <p id="cd-du-label" class="text-center text-brand-accent font-medium mb-4"></p>
+      <div class="grid grid-cols-4 gap-2">
+        <div class="flex flex-col items-center"><span id="cd-du-days" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Tage</span></div>
+        <div class="flex flex-col items-center"><span id="cd-du-hours" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Std</span></div>
+        <div class="flex flex-col items-center"><span id="cd-du-minutes" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Min</span></div>
+        <div class="flex flex-col items-center"><span id="cd-du-seconds" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Sek</span></div>
+      </div>
+    </div>
+
+    <div class="bg-brand-card border border-brand-border rounded-2xl p-6">
+      <p id="cd-ich-label" class="text-center text-brand-accent font-medium mb-4"></p>
+      <div class="grid grid-cols-4 gap-2">
+        <div class="flex flex-col items-center"><span id="cd-ich-days" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Tage</span></div>
+        <div class="flex flex-col items-center"><span id="cd-ich-hours" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Std</span></div>
+        <div class="flex flex-col items-center"><span id="cd-ich-minutes" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Min</span></div>
+        <div class="flex flex-col items-center"><span id="cd-ich-seconds" class="text-2xl font-semibold tabular-nums">0</span><span class="text-brand-muted text-[10px] mt-1">Sek</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WÜNSCHE ============ -->
+<section id="wishes" class="reveal min-h-screen flex flex-col items-center justify-center px-6 py-24">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2 text-center">Das wünsche ich dir für das nächste Jahr <span class="heart-accent">♥</span></h2>
+  <p class="text-brand-muted text-sm mb-10 text-center">Von Herzen.</p>
+
+  <div id="wishes-list" class="w-full max-w-md space-y-4"></div>
+</section>
+
+<!-- ============ POLAROID-ALBUM ============ -->
+<section id="album" class="reveal min-h-screen flex flex-col items-center justify-center px-6 py-24">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2 text-center">Unsere Momente <span class="heart-accent">♥</span></h2>
+  <p class="text-brand-muted text-sm mb-10 text-center">Zum Durchwischen ➜</p>
+
+  <div class="polaroid-scroll">
+    <div class="polaroid" style="--rot:-4deg;"><img src="fotos/foto1.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:3deg;"><img src="fotos/foto2.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:-2deg;"><img src="fotos/foto3.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:5deg;"><img src="fotos/foto4.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:-5deg;"><img src="fotos/foto5.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:2deg;"><img src="fotos/foto6.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:-3deg;"><img src="fotos/foto7.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:4deg;"><img src="fotos/foto8.jpg" alt="" loading="lazy"></div>
+    <div class="polaroid" style="--rot:-2deg;"><img src="fotos/foto9.jpg" alt="" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- ============ FINALE ============ -->
+<section id="finale" class="reveal min-h-screen flex flex-col items-center justify-center px-6 py-24 text-center">
+  <p class="text-2xl mb-4">💗</p>
+  <h2 id="finale-title" class="text-3xl sm:text-4xl font-semibold text-brand-accent"></h2>
+  <img id="finale-image" class="hidden mt-8 rounded-2xl max-w-xs sm:max-w-sm shadow-2xl" alt="">
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Texte aus CONFIG einsetzen ----------
+  document.getElementById('page-title').textContent = 'Für ' + CONFIG.namen.du;
+  document.getElementById('hero-name').textContent = CONFIG.namen.du;
+  document.getElementById('cd-du-label').textContent = 'Geburtstag von ' + CONFIG.namen.du;
+  document.getElementById('cd-ich-label').textContent = 'Geburtstag von ' + CONFIG.namen.ich;
+  document.getElementById('finale-title').textContent = CONFIG.abschluss.ueberschrift;
+  if (CONFIG.abschluss.bildUrl) {
+    const img = document.getElementById('finale-image');
+    img.src = CONFIG.abschluss.bildUrl;
+    img.classList.remove('hidden');
+  }
+
+  // ---------- Konfetti (abhängigkeitsfrei, Canvas) ----------
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let confettiRAF = null;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  const confettiColors = ['#ec4899', '#f4a6c9', '#ffffff', '#f9c9dd'];
+
+  function burstConfetti(count) {
+    if (reduceMotion) return;
+    count = count || 120;
+    const originX = canvas.width / 2;
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: originX + (Math.random() - 0.5) * 100,
+        y: -20,
+        vx: (Math.random() - 0.5) * 6,
+        vy: Math.random() * 3 + 2,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 6 + 4,
+        color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+        life: 0
+      });
+    }
+    if (!confettiRAF) confettiRAF = requestAnimationFrame(stepConfetti);
+  }
+
+  function stepConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.vy += 0.06; // Schwerkraft
+      p.vx *= 0.995; // leichter Luftwiderstand
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.rotationSpeed;
+      p.life++;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    });
+
+    particles = particles.filter(p => p.y < canvas.height + 40 && p.life < 400);
+
+    if (particles.length > 0) {
+      confettiRAF = requestAnimationFrame(stepConfetti);
+    } else {
+      confettiRAF = null;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  // ---------- Freundschaftsdauer: ruhige Zahl, einmalig hochzählend beim Scrollen ----------
+  const friendshipEl = document.getElementById('friendship-years');
+  const friendshipTarget = CONFIG.freundschaftJahre;
+  let friendshipAnimated = false;
+
+  function animateFriendshipYears() {
+    if (friendshipAnimated) return;
+    friendshipAnimated = true;
+    if (reduceMotion) {
+      friendshipEl.textContent = friendshipTarget;
+      return;
+    }
+    let current = 0;
+    const duration = 1200;
+    const startTime = performance.now();
+    function step(now) {
+      const progress = Math.min(1, (now - startTime) / duration);
+      current = Math.round(progress * friendshipTarget);
+      friendshipEl.textContent = current;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const friendshipSection = document.getElementById('friendship');
+  if ('IntersectionObserver' in window) {
+    const friendshipObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) animateFriendshipYears();
+      });
+    }, { threshold: 0.5 });
+    friendshipObserver.observe(friendshipSection);
+  } else {
+    animateFriendshipYears();
+  }
+
+  // ---------- Countdowns ----------
+  function getNextOccurrence(monat, tag) {
+    const now = new Date();
+    let target = new Date(now.getFullYear(), monat - 1, tag, 0, 0, 0);
+    if (target < now) {
+      target = new Date(now.getFullYear() + 1, monat - 1, tag, 0, 0, 0);
+    }
+    return target;
+  }
+
+  function updateCountdown(prefix, monat, tag) {
+    const now = new Date();
+    const target = getNextOccurrence(monat, tag);
+    let diff = Math.max(0, target - now);
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff -= days * 24 * 60 * 60 * 1000;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    diff -= hours * 60 * 60 * 1000;
+    const minutes = Math.floor(diff / (1000 * 60));
+    diff -= minutes * 60 * 1000;
+    const seconds = Math.floor(diff / 1000);
+
+    document.getElementById(prefix + '-days').textContent = days;
+    document.getElementById(prefix + '-hours').textContent = hours;
+    document.getElementById(prefix + '-minutes').textContent = minutes;
+    document.getElementById(prefix + '-seconds').textContent = seconds;
+  }
+
+  function tick() {
+    updateCountdown('cd-du', CONFIG.geburtstage.du.monat, CONFIG.geburtstage.du.tag);
+    updateCountdown('cd-ich', CONFIG.geburtstage.ich.monat, CONFIG.geburtstage.ich.tag);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ---------- Gründe ----------
+  // Bewusst NICHT gespeichert: bei jedem neuen Laden der Seite sollen wieder
+  // alle Gründe verdeckt sein, damit man die Überraschung mehrmals erleben kann.
+  const TOTAL_REASONS = CONFIG.gruende.length;
+  const variants = ['fade', 'zoom', 'slide', 'flip'];
+  let clickCount = 0;
+
+  const reasonsBtn = document.getElementById('reasons-btn');
+  const reasonsCurrent = document.getElementById('reasons-current');
+  const reasonsCurrentCard = document.getElementById('reasons-current-card');
+  const reasonsList = document.getElementById('reasons-list');
+  const reasonsHeading = document.getElementById('reasons-heading');
+  const reasonsProgress = document.getElementById('reasons-progress');
+  const reasonsClosing = document.getElementById('reasons-closing');
+  const reasonsClosingText = document.getElementById('reasons-closing-text');
+
+  reasonsHeading.innerHTML = 'Das mag ich am liebsten an dir <span class="heart-accent">♥</span>';
+  reasonsClosingText.textContent = 'Das waren nur ' + TOTAL_REASONS + ' von unendlich vielen Gründen.';
+
+  // Zeigt genau EINEN Grund an der immer gleichen Stelle (direkt unterm Button) an,
+  // damit man nicht bei jedem Klick wieder hochscrollen muss.
+  function showCurrentReason(text, variant, animate) {
+    reasonsCurrentCard.textContent = text;
+    reasonsCurrentCard.classList.remove('anim-fade', 'anim-zoom', 'anim-slide', 'anim-flip');
+    if (animate && !reduceMotion) {
+      void reasonsCurrentCard.offsetWidth; // Reflow erzwingen, damit die Animation auch bei gleicher Klasse neu startet
+      reasonsCurrentCard.classList.add('anim-' + variant);
+    }
+    reasonsCurrent.classList.remove('hidden');
+  }
+
+  // Erst wenn alle Gründe aufgedeckt sind, erscheint die komplette Liste zum Nachlesen.
+  function renderFullList() {
+    reasonsList.innerHTML = '';
+    CONFIG.gruende.forEach((text) => {
+      const card = document.createElement('div');
+      card.className = 'bg-brand-card border border-brand-border rounded-xl px-5 py-4 text-brand-text/90';
+      card.textContent = text;
+      reasonsList.appendChild(card);
+    });
+    reasonsList.classList.remove('hidden');
+  }
+
+  function finishReasons() {
+    reasonsBtn.classList.add('hidden');
+    reasonsCurrent.classList.add('hidden');
+    reasonsClosing.classList.remove('hidden');
+    renderFullList();
+  }
+
+  reasonsProgress.textContent = clickCount + ' / ' + TOTAL_REASONS;
+
+  reasonsBtn.addEventListener('click', () => {
+    if (clickCount >= TOTAL_REASONS) return;
+    const text = CONFIG.gruende[clickCount];
+    const variant = variants[clickCount % variants.length];
+    showCurrentReason(text, variant, true);
+    clickCount++;
+    reasonsProgress.textContent = clickCount + ' / ' + TOTAL_REASONS;
+
+    if (clickCount === TOTAL_REASONS) {
+      burstConfetti(80);
+      finishReasons();
+    }
+  });
+
+  // ---------- Wünsche: direkt als Liste anzeigen ----------
+  const wishesList = document.getElementById('wishes-list');
+  CONFIG.wuensche.forEach((text) => {
+    const card = document.createElement('div');
+    card.className = 'bg-brand-card border border-brand-border rounded-xl px-6 py-5 text-center text-brand-text/90';
+    card.textContent = text;
+    wishesList.appendChild(card);
+  });
+
+  // ---------- Finale: kleiner Konfetti-Gruß, sobald man dort ankommt ----------
+  const finaleSection = document.getElementById('finale');
+  let finaleCelebrated = false;
+  if ('IntersectionObserver' in window) {
+    const finaleObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !finaleCelebrated) {
+          finaleCelebrated = true;
+          burstConfetti(150);
+        }
+      });
+    }, { threshold: 0.5 });
+    finaleObserver.observe(finaleSection);
+  }
+
+  // ---------- Scroll-Reveal ----------
+  const revealTargets = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.2 });
+    revealTargets.forEach(el => observer.observe(el));
+  } else {
+    revealTargets.forEach(el => el.classList.add('in-view'));
+  }
+
+  // ---------- Hero-Konfetti beim Laden ----------
+  window.addEventListener('load', () => {
+    setTimeout(() => burstConfetti(150), 300);
+  });
+})();
+</script>
+
+</body>
+</html>
